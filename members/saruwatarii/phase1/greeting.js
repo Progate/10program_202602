@@ -12,11 +12,13 @@ rl.question('名前を入力してください: ', (name) => {
     return;
   }
 
-  // Process: 時間帯に応じて挨拶を変える
+  // Process: 名前や時間帯に応じて挨拶を変える
   const hour = new Date().getHours();
   let greeting;
 
-  if (hour >= 5 && hour < 12) {
+  if (name === '田中') {
+    greeting = 'いつもお世話になっております！';
+  } else if (hour >= 5 && hour < 12) {
     greeting = 'おはよう';
   } else if (hour >= 12 && hour < 18) {
     greeting = 'こんにちは';

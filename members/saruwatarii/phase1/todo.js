@@ -11,7 +11,7 @@ const rl = readline.createInterface({
 const tasks = [];
 
 console.log('--- ToDoリストアプリ ---');
-console.log('コマンド: add <タスク名>, list, done <タスク名>, exit');
+console.log('コマンド: add <タスク名>, list, done <タスク名>, search <キーワード>, exit');
 
 // ユーザーの入力を待機するループ
 rl.on('line', (line) => {
@@ -45,10 +45,22 @@ rl.on('line', (line) => {
     } else {
       console.log('エラー: そのタスクは見つかりませんでした');
     }
+  } else if (command === 'search') {
+    if (!content) {
+      console.log('エラー: 検索キーワードを入力してください');
+    } else {
+      const results = tasks.filter(task => task.includes(content));
+      if (results.length === 0) {
+        console.log('該当するタスクはありません');
+      } else {
+        console.log('--- 検索結果 ---');
+        results.forEach(task => console.log(task));
+      }
+    }
   } else if (command === 'exit') {
     console.log('アプリを終了します');
     rl.close();
   } else {
-    console.log('無効なコマンドです (使えるコマンド: add, list, done, exit)');
+    console.log('無効なコマンドです (使えるコマンド: add, list, done, search, exit)');
   }
 });
