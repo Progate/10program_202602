@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Day7 Client-Server</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+      }
+      input {
+        flex: 1;
+        padding: 8px;
+      }
+      button {
+        padding: 8px 14px;
+      }
+      #status {
+        margin-top: 12px;
+        color: #0b7a29;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Client / Server メッセージ送信</h1>
+
+    <div class="row">
+      <input id="messageInput" type="text" placeholder="メッセージを入力" />
+      <button id="sendButton" type="button">送信</button>
+    </div>
+
+    <p id="status"></p>
+
+    <script>
+      const messageInput = document.getElementById('messageInput');
+      const sendButton = document.getElementById('sendButton');
+      const status = document.getElementById('status');
+
+      sendButton.addEventListener('click', async () => {
+        const message = messageInput.value.trim();
+
+        if (!message) {
+          status.textContent = 'メッセージを入力してください';
+          return;
+        }
+
+        const payload = { message };
+        console.log('[CLIENT] 送信前データ:', payload);
+
+        try {
+          const response = await fetch('/api/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+
+          const result = await response.json();
+          console.log('[CLIENT] 送信後レスポンス:', result);
+
+          if (result.success) {
+            status.textContent = '送信しました';
+            messageInput.value = '';
+          } else {
+            status.textContent = '送信に失敗しました';
+          }
+        } catch (error) {
+          console.error('[CLIENT] 送信エラー:', error);
+          status.textContent = '送信に失敗しました';
+        }
+      });
+    </script>
+  </body>
+</html>
