@@ -9,6 +9,22 @@ const PORT = 3000;
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/api/messages', async (req, res) => {
+  try {
+    const messages = await prisma.message.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    console.log(`[SERVER] メッセージを取得しました: ${messages.length}件`);
+    return res.json(messages);
+  } catch (error) {
+    console.error('[SERVER] 取得エラー:', error);
+    return res.status(500).json({ error: '取得に失敗しました' });
+  }
+});
+
 app.post('/api/messages', async (req, res) => {
   const name = typeof req.body.name === 'string' ? req.body.name.trim() : '';
   const content = typeof req.body.content === 'string' ? req.body.content.trim() : '';

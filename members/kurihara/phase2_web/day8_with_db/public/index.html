@@ -27,6 +27,17 @@
       #status {
         min-height: 1.2em;
       }
+      #messageList {
+        margin-top: 24px;
+        padding-left: 20px;
+      }
+      #messageList li {
+        margin-bottom: 12px;
+      }
+      .meta {
+        color: #555;
+        font-size: 14px;
+      }
     </style>
   </head>
   <body>
@@ -40,11 +51,65 @@
 
     <p id="status"></p>
 
+    <h2>メッセージ一覧</h2>
+    <ul id="messageList"></ul>
+
     <script>
       const form = document.getElementById('messageForm');
       const nameInput = document.getElementById('nameInput');
       const contentInput = document.getElementById('contentInput');
       const status = document.getElementById('status');
+      const messageList = document.getElementById('messageList');
+
+      function formatDateTime(value) {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) {
+          return value;
+        }
+        return date.toLocaleString('ja-JP');
+      }
+
+      function renderMessages(messages) {
+        if (!Array.isArray(messages) || messages.length === 0) {
+          messageList.innerHTML = '<li>まだメッセージはありません</li>';
+          return;
+        }
+
+        messageList.innerHTML = messages
+          .map((message) => {
+            const safeName = message.name ?? '';
+            const safeContent = message.content ?? '';
+            const dateText = formatDateTime(message.createdAt);
+            return `
+              <li>
+                <div><strong>${safeName}</strong></div>
+                <div>${safeContent}</div>
+                <div class="meta">${dateText}</div>
+              </li>
+            `;
+          })
+          .join('');
+      }
+
+      async function loadMessages() {
+        console.log('[CLIENT] メッセージ一覧を取得します');
+
+        try {
+          const response = await fetch('/api/messages');
+          const messages = await response.json();
+          console.log('[CLIENT] メッセージ一覧を取得しました:', messages);
+
+          if (!response.ok) {
+            status.textContent = '一覧の取得に失敗しました';
+            return;
+          }
+
+          renderMessages(messages);
+        } catch (error) {
+          console.error('[CLIENT] 一覧取得エラー:', error);
+          status.textContent = '一覧の取得に失敗しました';
+        }
+      }
 
       form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -80,11 +145,14 @@
           status.textContent = '送信しました';
           nameInput.value = '';
           contentInput.value = '';
+          await loadMessages();
         } catch (error) {
           console.error('[CLIENT] 送信エラー:', error);
           status.textContent = '送信に失敗しました';
         }
       });
+
+      loadMessages();
     </script>
   </body>
 </html>
