@@ -42,6 +42,97 @@ header .subtitle {
   font-size: 0.9rem;
 }
 
+/* ダークモード */
+body.dark {
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+}
+
+body.dark .container header h1 {
+  color: #e0e0e0;
+}
+
+body.dark .add-form input {
+  background-color: #16213e;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+body.dark .item {
+  background-color: #16213e;
+  color: #e0e0e0;
+}
+
+body.dark .item-title {
+  color: #e0e0e0;
+}
+
+body.dark .item-completed {
+  background-color: #0f3460;
+  opacity: 0.6;
+}
+
+body.dark .item-completed .item-title {
+  color: #888;
+}
+
+body.dark .empty-message {
+  background-color: #16213e;
+  color: #888;
+}
+
+/* テーマ切り替えスイッチ */
+header {
+  position: relative;
+}
+
+.theme-switch {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.theme-switch input {
+  display: none;
+}
+
+.slider {
+  width: 44px;
+  height: 24px;
+  background-color: #ccc;
+  border-radius: 12px;
+  position: relative;
+  transition: background-color 0.3s;
+}
+
+.slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  background-color: white;
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.3s;
+}
+
+.theme-switch input:checked + .slider {
+  background-color: #3498db;
+}
+
+.theme-switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+.theme-label {
+  font-size: 1.1rem;
+}
+
 /* フォーム */
 .add-form {
   display: flex;
@@ -110,6 +201,69 @@ header .subtitle {
 .item-title {
   font-size: 1rem;
   color: #2c3e50;
+  flex: 1;
+}
+
+.item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.item-button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.edit-button {
+  background-color: #7f8c8d;
+}
+
+.edit-button:hover {
+  background-color: #6c7a7d;
+}
+
+.done-button {
+  background-color: #27ae60;
+}
+
+.done-button:hover {
+  background-color: #219150;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* 完了アイテム */
+.item-completed {
+  background-color: #f0f0f0;
+  opacity: 0.7;
+}
+
+.item-completed .item-title {
+  color: #95a5a6;
+  text-decoration: line-through;
+}
+
+.item-checkbox {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  cursor: pointer;
+  accent-color: #27ae60;
 }
 
 /* 空メッセージ */
